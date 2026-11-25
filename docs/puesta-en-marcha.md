@@ -57,7 +57,10 @@ Menú de la izquierda: **Hosting y sin servidores → Hosting → Comenzar**. Sa
 
 ## 7. El pase sin llave para que GitHub publique la app
 
-1. Entrá a **console.cloud.google.com** (con la misma cuenta). Arriba, en el selector de proyectos, elegí el proyecto del paso 1.
+1. Entrá directo a **https://console.cloud.google.com/?project=licencias-supervision-zona-i**. Arriba tiene que decir **Licencias Supervision Zona I**.
+   - Si en el selector de proyectos no aparece, buscalo en la pestaña **Todos** (en "Recientes" sólo salen los últimos que abriste).
+   - Si dice que no tenés permiso o no lo encuentra, estás con otra cuenta de Google: tocá tu foto arriba a la derecha y cambiá a la cuenta secundaria, la misma con la que creaste el proyecto en Firebase.
+   - Si aparece "Comienza tu prueba gratuita con $300", tocá **Descartar**. No hace falta poner tarjeta ni activar nada pago.
 2. Arriba a la derecha tocá el ícono **`>_`** (Activar Cloud Shell). Abajo se abre una consola negra. Si pide autorizar, tocá **Autorizar**.
 3. Pegá todo esto junto en la consola y apretá Enter (ya tiene el ID del proyecto, `licencias-supervision-zona-i`):
 
