@@ -1,0 +1,17 @@
+{
+  "name": "licencias-supervision",
+  "private": true,
+  "description": "Herramientas de desarrollo (pruebas automáticas). La app en sí es index.html y no necesita nada de esto.",
+  "type": "module",
+  "scripts": {
+    "test": "firebase emulators:exec --only auth,firestore --project demo-licencias \"node --test --test-concurrency=1 pruebas/*.test.mjs\"",
+    "test:calculos": "node --test pruebas/calculos.test.mjs",
+    "test:reglas": "firebase emulators:exec --only firestore --project demo-licencias \"node --test pruebas/reglas.test.mjs\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "6.0.0",
+    "firebase": "13.2.0",
+    "firebase-tools": "15.37.0",
+    "playwright": "1.63.0"
+  }
+}
