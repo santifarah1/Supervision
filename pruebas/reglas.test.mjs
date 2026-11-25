@@ -57,6 +57,12 @@ test('no se puede crear el perfil de otra persona ni con otro mail', async () =>
 test('sin iniciar sesión no se puede registrar', async () => {
   await assertFails(setDoc(doc(anonimo(), 'usuarios/n1'), alta('n1')));
 });
+test('el código guardado a mano con espacios o minúsculas igual sirve', async () => {
+  await env.withSecurityRulesDisabled(async (ctx) => { await setDoc(doc(ctx.firestore(), 'config/acceso'), { codigo: ' esrn-prueba-7q4k ' }); });
+  await assertSucceeds(setDoc(doc(como('n1'), 'usuarios/n1'), alta('n1')));
+  await assertFails(setDoc(doc(como('n2'), 'usuarios/n2'), alta('n2', { codigo: 'ESRN-PRUEBA-0000' })));
+  await assertFails(setDoc(doc(como('n3'), 'usuarios/n3'), alta('n3', { codigo: '' })));
+});
 test('si todavía no hay código cargado, nadie se puede registrar', async () => {
   await env.withSecurityRulesDisabled(async (ctx) => { await deleteDoc(doc(ctx.firestore(), 'config/acceso')); });
   await assertFails(setDoc(doc(como('n1'), 'usuarios/n1'), alta('n1')));
