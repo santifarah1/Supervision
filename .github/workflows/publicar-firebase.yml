@@ -24,8 +24,8 @@ concurrency:
 env:
   # Se completan cuando se crea el proyecto (docs/puesta-en-marcha.md, paso 7).
   # No son secretos: sólo dicen a qué puerta de Google golpear y con qué cuenta.
-  PROYECTO: ''
-  NUMERO_PROYECTO: ''
+  PROYECTO: licencias-supervision-zona-i
+  NUMERO_PROYECTO: '697446325681'
 
 jobs:
   publicar:

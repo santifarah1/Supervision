@@ -30,7 +30,7 @@ El proyecto queda en el plan **Spark**, que es gratis y no pide tarjeta. Para un
 
 ## 3. Activar el ingreso con usuario
 
-1. En el menú de la izquierda: **Compilación → Authentication → Comenzar**.
+1. En el menú de la izquierda: **Seguridad → Authentication → Comenzar**.
 2. Pestaña **Método de acceso**:
    - **Correo electrónico/contraseña** → activar el primer interruptor → **Guardar**.
    - **Agregar proveedor nuevo → Google** → activar → en "Correo electrónico de asistencia" elegí tu mail → **Guardar**.
@@ -44,22 +44,25 @@ El proyecto queda en el plan **Spark**, que es gratis y no pide tarjeta. Para un
 
 ## 5. Crear la base de datos
 
-1. Menú de la izquierda: **Compilación → Firestore Database → Crear base de datos**.
-2. Ubicación: **southamerica-east1 (São Paulo)**. Es la más cercana y **no se puede cambiar después**.
-3. Modo: **Producción** → **Crear**.
+1. Menú de la izquierda: **Bases de datos y almacenamiento → Firestore** (o buscá "Firestore" en **Buscar productos**) → **Crear base de datos**.
+2. Edición: **Estándar**, si lo pregunta.
+3. Ubicación: **southamerica-east1 (São Paulo)**. Es la más cercana y **no se puede cambiar después**.
+4. Modo: **Producción** → **Crear**.
+
+> **Ojo: no es "Realtime Database".** Firebase tiene dos bases de datos con nombres parecidos. La app usa **Firestore**. Realtime Database es otra cosa: sólo ofrece Estados Unidos, Bélgica y Singapur, y por eso no aparece São Paulo. Si la abriste, tocá **Cancelar** y no crees nada ahí.
 
 ## 6. Activar el Hosting (donde vive la página)
 
-Menú de la izquierda: **Compilación → Hosting → Comenzar**. Salteá todos los pasos con **Siguiente** y al final **Continuar a la consola**. No hay que instalar nada.
+Menú de la izquierda: **Hosting y sin servidores → Hosting → Comenzar**. Salteá todos los pasos con **Siguiente** y al final **Continuar a la consola**. No hay que instalar nada.
 
 ## 7. El pase sin llave para que GitHub publique la app
 
 1. Entrá a **console.cloud.google.com** (con la misma cuenta). Arriba, en el selector de proyectos, elegí el proyecto del paso 1.
 2. Arriba a la derecha tocá el ícono **`>_`** (Activar Cloud Shell). Abajo se abre una consola negra. Si pide autorizar, tocá **Autorizar**.
-3. En la primera línea de abajo, cambiá `EL-ID-DEL-PROYECTO` por el ID del paso 1. Después pegá todo junto en la consola y apretá Enter:
+3. Pegá todo esto junto en la consola y apretá Enter (ya tiene el ID del proyecto, `licencias-supervision-zona-i`):
 
    ```bash
-   PROYECTO=EL-ID-DEL-PROYECTO
+   PROYECTO=licencias-supervision-zona-i
    gcloud config set project "$PROYECTO"
    NUMERO=$(gcloud projects describe "$PROYECTO" --format='value(projectNumber)')
    gcloud services enable iamcredentials.googleapis.com sts.googleapis.com firebasehosting.googleapis.com firebaserules.googleapis.com
@@ -87,7 +90,7 @@ Si algún comando dice `already exists` (ya existe), es porque se corrió dos ve
 
 ## 8. Claude completa los datos y vos mergeás
 
-Con lo de los pasos 4 y 7, Claude arma un PR chico que completa el `firebaseConfig` en la app, el proyecto en el workflow de publicación y en la copia nocturna. Cuando lo mergeás, GitHub publica la app sola en **https://EL-ID-DEL-PROYECTO.web.app** y sube las reglas de seguridad. Lo ves en GitHub → **Actions → Publicar en Firebase**: tiene que quedar en verde.
+Los datos del proyecto ya están completos en la app, en el workflow de publicación y en la copia nocturna. **Mergeá ese PR recién después de terminar el paso 7**: al mergearlo, GitHub publica la app sola en **https://licencias-supervision-zona-i.web.app** y sube las reglas de seguridad. Lo ves en GitHub → **Actions → Publicar en Firebase**: tiene que quedar en verde.
 
 ## 9. El código de la supervisión
 

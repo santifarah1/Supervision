@@ -7,7 +7,7 @@
  * de ese Drive. El archivo tiene el mismo formato que "Exportar copia" de la app,
  * así que se puede volver a cargar con Ajustes → Datos → Importar copia.
  */
-const PROYECTO = ''; // el ID del proyecto de Firebase (docs/puesta-en-marcha.md, paso 4)
+const PROYECTO = 'licencias-supervision-zona-i'; // el ID del proyecto de Firebase
 const CARPETA = 'Copias Licencias Supervisión';
 const COPIAS_A_GUARDAR = 60; // las más viejas se mandan a la papelera
 const COLECCIONES = ['agentes', 'licencias', 'notas', 'articulos', 'calendario'];
