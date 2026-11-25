@@ -31,7 +31,7 @@ Sólo hay docentes de la Res. 233/98 (no hay PSA). El calendario de feriados y a
 
 ## Dónde se guardan los datos
 
-**Con servidor (Firebase).** En el link propio de la app (`https://<proyecto>.web.app`) se entra con usuario y contraseña y los datos quedan en el servidor, compartidos entre todas las compus. Hay tres tipos de usuario:
+**Con servidor (Firebase).** En el link propio de la app (**https://licencias-supervision-zona-i.web.app**) se entra con usuario y contraseña y los datos quedan en el servidor, compartidos entre todas las compus. Hay tres tipos de usuario:
 
 | Tipo | Quién | Qué puede hacer |
 |---|---|---|
@@ -41,7 +41,7 @@ Sólo hay docentes de la Res. 233/98 (no hay PSA). El calendario de feriados y a
 
 Para crear una cuenta hace falta el **código de la supervisión**, que controla el servidor (`firestore.rules`). Sigue andando sin internet y tiene modo emergencia con la copia guardada en la compu. Además hay una copia de todas las noches en el Drive de cada cuenta dueña ([`herramientas/copia-diaria`](herramientas/copia-diaria/LEEME.md)).
 
-Cómo se crea el proyecto, paso a paso: **[Puesta en marcha](docs/puesta-en-marcha.md)**. Mientras no esté creado, `FIREBASE_CONFIG` está vacío en `index.html` y la app funciona sin servidor.
+Cómo se crea el proyecto, paso a paso: **[Puesta en marcha](docs/puesta-en-marcha.md)**. El proyecto es `licencias-supervision-zona-i`; sus datos están en `FIREBASE_CONFIG`, dentro de `index.html`.
 
 **Sin servidor (plan B).** Abriendo `index.html` en la compu, o en el link de respaldo de GitHub Pages, la app guarda en el navegador y, si se elige, en un archivo de una carpeta de Google Drive u OneDrive (Ajustes → Datos y respaldo). Conviene tocar **Exportar copia** seguido.
 

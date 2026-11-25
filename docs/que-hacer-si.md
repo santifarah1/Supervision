@@ -2,11 +2,11 @@
 
 Guía para cuando algo no anda. Está pensada para leerla con calma en el momento del problema, sin tener que acordarse de nada.
 
-**Datos a mano** (se completan al terminar la [puesta en marcha](puesta-en-marcha.md))
+**Datos a mano**
 
-- App: **https://EL-ID-DEL-PROYECTO.web.app**
+- App: **https://licencias-supervision-zona-i.web.app**
 - Link de respaldo (guarda sólo en la compu): **https://santifarah1.github.io/Supervision/**
-- Consola de Firebase: **console.firebase.google.com**, proyecto de la supervisión
+- Consola de Firebase: **console.firebase.google.com** → proyecto **Licencias Supervision Zona I** (`licencias-supervision-zona-i`, número `697446325681`)
 - Copias de todas las noches: Drive de cada cuenta dueña → carpeta **Copias Licencias Supervisión**
 - Repositorio: **github.com/santifarah1/Supervision**
 
