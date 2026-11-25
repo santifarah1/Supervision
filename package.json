@@ -1,5 +1,5 @@
 {
-  "name": "licencias-esrn",
+  "name": "licencias-supervision",
   "private": true,
   "description": "Herramientas de desarrollo (pruebas automáticas). La app en sí es index.html y no necesita nada de esto.",
   "type": "module",
