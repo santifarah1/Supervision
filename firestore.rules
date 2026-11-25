@@ -5,7 +5,7 @@ rules_version = '2';
 // no puede leer ni escribir nada que estas reglas no permitan.
 //
 // Tipos de usuario (campo "rol" en usuarios/{uid}):
-//   admin    → todo, más ver y administrar usuarios y el código de la escuela
+//   admin    → todo, más ver y administrar usuarios y el código de la supervisión
 //   carga    → leer y cargar datos
 //   consulta → sólo leer
 service cloud.firestore {
@@ -19,11 +19,16 @@ service cloud.firestore {
     function esAdmin() { return activo() && perfil().rol == 'admin'; }
     function puedeCargar() { return activo() && perfil().rol in ['admin', 'carga']; }
 
-    // El código de la escuela sólo lo puede leer el administrador.
+    // El código de la supervisión sólo lo puede leer el administrador.
     // Al registrarse, las reglas lo comparan desde el servidor: nunca viaja a la página.
     function rutaAcceso() { return /databases/$(database)/documents/config/acceso; }
+    // El código guardado se compara sin espacios y en mayúsculas (la app manda el escrito igual),
+    // así un espacio de más o una minúscula al cargarlo a mano en la consola no traba los registros.
     function codigoValido(c) {
-      return c is string && exists(rutaAcceso()) && c == get(rutaAcceso()).data.codigo;
+      return c is string && exists(rutaAcceso())
+        && get(rutaAcceso()).data.codigo is string
+        && c.size() > 0
+        && c == get(rutaAcceso()).data.codigo.replace(' ', '').trim().upper();
     }
 
     match /config/acceso {
@@ -35,7 +40,7 @@ service cloud.firestore {
       allow read: if (logueado() && request.auth.uid == uid) || esAdmin();
 
       // Registro: la persona crea su propio perfil eligiendo "carga" o "consulta",
-      // y sólo si puso bien el código de la escuela.
+      // y sólo si puso bien el código de la supervisión.
       allow create: if logueado() && request.auth.uid == uid
         && request.resource.data.keys().hasOnly(['nombre', 'email', 'rol', 'activo', 'codigo', 'creado'])
         && request.resource.data.nombre is string
@@ -56,7 +61,7 @@ service cloud.firestore {
       allow delete: if esAdmin();
     }
 
-    // Datos de la escuela (agentes, licencias, notas, artículos, calendario…).
+    // Datos de la supervisión (personas, licencias, notas, artículos, calendario…).
     // Se usan a partir de la etapa 3; ya quedan protegidos.
     match /datos/{coleccion}/registros/{id} {
       allow read: if activo();
