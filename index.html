@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Licencias · Supervisión Zona I</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ffffff'/%3E%3Crect x='.5' y='.5' width='31' height='31' rx='6.5' fill='none' stroke='%23d8d4c8'/%3E%3Cg font-family='Arial Black,Arial,Helvetica,sans-serif' font-weight='900' font-size='14.5' text-anchor='middle' letter-spacing='-.6'%3E%3Ctext x='16' y='14.6' fill='%235e9b1c'%3EES%3C/text%3E%3Ctext x='16' y='28.4' fill='%233181d3'%3ERN%3C/text%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f3a4a'/%3E%3Ctext x='16' y='24.5' text-anchor='middle' font-family='Arial Black,Arial,Helvetica,sans-serif' font-weight='900' font-size='23' fill='%23ffffff'%3EZ%3C/text%3E%3Crect x='7' y='26.5' width='18' height='2.5' rx='1.2' fill='%23a7b04a'/%3E%3C/svg%3E">
 <style>
 /* ============ 1. Tokens: todo valor visual sale de acá ============ */
 :root{
@@ -3026,10 +3026,16 @@ window.addEventListener('afterprint', () => { $('#print-area').innerHTML = ''; }
    Etapa 2: ingreso, registro con código de la supervisión y tipos de usuario.
    Etapa 3: con la nube activa, los datos se guardan en el servidor (ver NubeDatos).
    ========================================================================= */
-// Proyecto de Firebase de la supervisión. Mientras esté en null, la app funciona sin servidor.
-// Cuando se crea el proyecto (docs/puesta-en-marcha.md, paso 4), acá va el "firebaseConfig" que da la consola.
+// Proyecto de Firebase de la supervisión (licencias-supervision-zona-i), creado con la cuenta secundaria.
 // Estos datos no son secretos (van en la página): la seguridad la dan las reglas.
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyA3WNeULKTIx3vIlIV6wNLpkqi6S7NLHgo',
+  authDomain: 'licencias-supervision-zona-i.firebaseapp.com',
+  projectId: 'licencias-supervision-zona-i',
+  storageBucket: 'licencias-supervision-zona-i.firebasestorage.app',
+  messagingSenderId: '697446325681',
+  appId: '1:697446325681:web:fd45b933bbcd2c0075b190',
+};
 // Link de la app con usuarios, y el link de respaldo (GitHub Pages: guarda sólo en la compu)
 const URL_APP = FIREBASE_CONFIG ? `https://${FIREBASE_CONFIG.projectId}.web.app` : '';
 const EN_LINK_VIEJO = /\.github\.io$/.test(location.hostname);
