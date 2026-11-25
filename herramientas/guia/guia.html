@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<title>Guía de uso — Licencias · Supervisión Secundaria Zona I Valle Inferior</title>
+<style>
+:root{
+  --oliva:#6b7a24; --oliva-osc:#4e5a16; --oliva-suave:#f1f3e4; --pizarra:#2f3a4a;
+  --tinta:#17191c; --tenue:#585e67; --borde:#dcd8cd; --papel:#f4f3ee;
+  --ok:#e9eedb; --warn:#fff3d6; --warn-borde:#f0d39a;
+}
+@page{size:A4;margin:16mm 16mm 18mm}
+*{box-sizing:border-box}
+body{margin:0;font:10.5pt/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--tinta)}
+h1{font-size:22pt;margin:0 0 6pt;letter-spacing:-.01em}
+h2{font-size:15pt;margin:0 0 6pt;padding-top:9pt;border-top:2.5pt solid var(--oliva)}
+h3{font-size:11.5pt;margin:12pt 0 4pt}
+p{margin:0 0 6pt}
+ul,ol{margin:0 0 8pt;padding-left:18pt}
+li{margin:0 0 3pt}
+section{margin:0 0 16pt}
+.tapa{border:1.5pt solid var(--oliva);border-radius:10pt;background:var(--oliva-suave);padding:18pt 22pt;margin-bottom:18pt}
+.tapa .logo{height:62pt;margin:0 0 10pt;border:0;border-radius:0}
+.tapa p{color:var(--tenue);font-size:12pt;margin-bottom:10pt}
+.indice{columns:2;column-gap:24pt;margin:0;padding-left:18pt}
+.indice li{margin:0 0 4pt;break-inside:avoid}
+img{display:block;max-width:100%;max-height:105mm;width:auto;border:1pt solid var(--borde);border-radius:6pt;margin:6pt auto 10pt;break-inside:avoid}
+img.mitad{max-height:62mm}
+img.medio{max-height:95mm}
+img.alto{max-height:135mm}
+img.celu{max-height:115mm}
+h2,h3{break-after:avoid}
+.caja{border-radius:7pt;padding:9pt 12pt;margin:8pt 0 10pt;background:var(--papel);break-inside:avoid}
+.caja b:first-child{display:block;margin-bottom:2pt}
+.caja.ok{background:var(--ok)}
+.caja.warn{background:var(--warn);border:1pt solid var(--warn-borde)}
+.btn{display:inline-block;font-weight:600;font-size:9pt;border:1pt solid var(--borde);border-radius:5pt;padding:0 6pt;background:#fff;white-space:nowrap}
+.btn.pz{background:var(--pizarra);border-color:var(--pizarra);color:#fff}
+.btn.ol{background:var(--oliva-osc);border-color:var(--oliva-osc);color:#fff}
+.pes{display:inline-block;font-size:8.5pt;font-weight:700;border-radius:20pt;padding:0 7pt;background:var(--oliva-suave);color:#3e4712;border:1pt solid #cfd5a6;white-space:nowrap}
+.art{display:inline-block;font-size:8.5pt;font-weight:700;border-radius:4pt;padding:0 6pt;background:#cde1f5;color:#0f3a63}
+.art.p{background:#f8c38c;color:#5c3000}
+.tram{display:inline-block;width:15pt;height:15pt;line-height:15pt;text-align:center;font-size:5.5pt;font-weight:700;border-radius:3pt;background:#ebe8df;color:#585e67;vertical-align:-3pt}
+.tram.ok{background:#e1e6c9;color:#3e4712;font-size:9pt}
+table{width:100%;border-collapse:collapse;margin:6pt 0 10pt;font-size:9.5pt;break-inside:avoid}
+th,td{border:1pt solid var(--borde);padding:5pt 7pt;text-align:left;vertical-align:top}
+th{background:var(--papel)}
+.dot{display:inline-block;width:7pt;height:7pt;border-radius:50%;margin-right:4pt;vertical-align:0}
+.salto{break-before:page}
+.evitar{break-inside:avoid}
+.dos{display:flex;gap:12pt;align-items:flex-start;break-inside:avoid}
+.dos > *{flex:1;min-width:0}
+.pie-final{color:var(--tenue);font-size:9pt;margin-top:12pt}
+</style>
+</head>
+<body>
+
+<div class="tapa">
+  <img class="logo" src="img/logo.png" alt="ZIGE — Supervisión Secundaria Zona I Valle Inferior">
+  <h1>Licencias del personal</h1>
+  <p>Guía de uso de la app de la Supervisión Secundaria Zona I Valle Inferior: directores, equipo supervisivo y docentes de los CEPJA, cada grupo en su pestaña. Versión: noviembre 2026.</p>
+  <ol class="indice">
+    <li>Antes de empezar</li>
+    <li>Crear tu usuario</li>
+    <li>Entrar cada día</li>
+    <li>La barra de arriba y las pestañas</li>
+    <li>Una sola ficha por persona</li>
+    <li>La pantalla de Inicio</li>
+    <li>Cargar una persona</li>
+    <li>Cargar una licencia</li>
+    <li>Consultar la ficha de una persona</li>
+    <li>Notas del día</li>
+    <li>Reportes y nómina</li>
+    <li>Días de clase (ciclo lectivo)</li>
+    <li>Feriados, artículos y topes</li>
+    <li>Pestañas (para quien administra)</li>
+    <li>Usuarios (para quien administra)</li>
+    <li>Respaldo de los datos</li>
+    <li>Si no anda el servidor</li>
+    <li>Si algo no anda</li>
+  </ol>
+</div>
+
+<section>
+  <h2>1. Antes de empezar</h2>
+  <ul>
+    <li>La app se abre en el link que te pasa quien administra (termina en <b>.web.app</b>). Guardalo en <b>Favoritos</b> (la estrellita al lado de la dirección).</li>
+    <li>Funciona en <b>Google Chrome</b>, <b>Microsoft Edge</b> y en el celular.</li>
+    <li>Los datos están <b>en el servidor de la supervisión</b>. Cada persona entra con su usuario y todos ven lo mismo, al instante: lo que carga una persona les aparece a las demás sin recargar la página.</li>
+    <li>Hay tres tipos de usuario:
+      <ul>
+        <li><b>Administra:</b> carga todo y, además, maneja los usuarios, las pestañas y las copias.</li>
+        <li><b>Carga licencias:</b> los secretarios. Cargan y corrigen personas, licencias y notas.</li>
+        <li><b>Solo consulta:</b> la supervisora. Ve todo pero no puede modificar nada.</li>
+      </ul></li>
+  </ul>
+</section>
+
+<section>
+  <h2>2. Crear tu usuario (una sola vez)</h2>
+  <p>Para crear tu cuenta necesitás el <b>código de la supervisión</b>, que te pasa quien administra la app.</p>
+  <div class="dos">
+    <div>
+      <ol>
+        <li>Abrí la app y tocá <b>Crear cuenta</b>.</li>
+        <li>Completá tu nombre y apellido, tu mail y una contraseña de al menos 6 caracteres.</li>
+        <li>Elegí qué vas a hacer: <b>Cargo licencias</b> (secretarios) o <b>Solo consulto</b> (supervisora).</li>
+        <li>Escribí el <b>código de la supervisión</b>. Da lo mismo si va en mayúsculas o minúsculas.</li>
+        <li>Tocá <span class="btn pz">Crear cuenta</span>.</li>
+      </ol>
+      <div class="caja"><b>Con Google</b>también se puede: tocá <b>Continuar con Google</b>, elegí tu cuenta de Gmail y después la app te pide qué vas a hacer y el código.</div>
+    </div>
+    <img class="medio" src="img/02-registro.png" alt="Crear cuenta">
+  </div>
+</section>
+
+<section class="evitar">
+  <h2>3. Entrar cada día</h2>
+  <div class="dos">
+    <div>
+      <p>Escribí tu mail y tu contraseña y tocá <span class="btn pz">Ingresar</span> (o <b>Continuar con Google</b>, si creaste la cuenta así). En tu compu la sesión queda abierta: la mayoría de los días la app se abre directamente.</p>
+      <p><b>¿Te olvidaste la contraseña?</b> Escribí tu mail y tocá <b>Olvidé mi contraseña</b>. Te llega un mail para elegir una nueva (si no aparece, mirá en spam).</p>
+    </div>
+    <img class="mitad" src="img/01-ingresar.png" alt="Pantalla de ingreso">
+  </div>
+</section>
+
+<section class="salto">
+  <h2>4. La barra de arriba y las pestañas</h2>
+  <p>Arriba están las secciones (<b>Inicio, Agentes, Reportes, Ajustes</b>), tu usuario, el indicador de guardado, el buscador y el botón verde <span class="btn ol">+ Licencia</span>. Justo debajo están <b>las pestañas</b>:</p>
+  <img src="img/03-barra.png" alt="Barra de arriba">
+  <img src="img/03b-pestanas.png" alt="Pestañas">
+  <ul>
+    <li>Cada pestaña es un grupo: <b>Directores</b>, <b>Equipo supervisivo</b> y un <b>CEPJA</b> por pestaña. El número es la cantidad de personas, y el <b>punto naranja</b> avisa que hay licencias con trámites pendientes.</li>
+    <li>Tocando una pestaña, <b>todo</b> lo que ves (Inicio, Agentes, Reportes) pasa a ser sólo de ese grupo. La pestaña elegida queda oscura.</li>
+    <li><b>Todos</b> muestra toda la supervisión junta.</li>
+    <li>La app recuerda en qué pestaña estabas la próxima vez que la abrís.</li>
+  </ul>
+  <table>
+    <tr><th style="width:42%">El indicador dice…</th><th>Qué significa</th></tr>
+    <tr><td><span class="dot" style="background:#4e5a16"></span>Guardado en la nube</td><td>Todo bien: lo que cargaste ya está en el servidor.</td></tr>
+    <tr><td><span class="dot" style="background:#8a8f98"></span>Guardando…</td><td>Lo está subiendo. Tarda un segundo.</td></tr>
+    <tr><td><span class="dot" style="background:#c98200"></span>Sin conexión</td><td>No hay internet. Podés seguir cargando: queda en la compu y se sube solo cuando vuelve la conexión.</td></tr>
+    <tr><td><span class="dot" style="background:#a8200d"></span>No se pudo guardar</td><td>El servidor no aceptó el cambio. Recargá la página y, si sigue, avisale a quien administra.</td></tr>
+  </table>
+  <h3>Tu usuario y cómo salir</h3>
+  <div class="dos">
+    <div>
+      <p>Tocando tu inicial se abre tu usuario:</p>
+      <ul>
+        <li><span class="btn">Salir</span> cierra la sesión. La compu se queda con una copia de los datos, por si algún día no anda el servidor (punto 17).</li>
+        <li><span class="btn">Salir y borrar esta compu</span> cierra la sesión y borra todo de esa compu. Usalo en una compu que no es tuya.</li>
+      </ul>
+      <div class="caja warn"><b>Sin internet, no salgas.</b>Si cerrás la sesión mientras dice "Sin conexión", lo que todavía no se subió se pierde.</div>
+    </div>
+    <img class="mitad" src="img/04-menu-usuario.png" alt="Menú del usuario">
+  </div>
+</section>
+
+<section>
+  <h2>5. Una sola ficha por persona</h2>
+  <p>Esto es lo más importante para entender la app: <b>cada persona tiene una sola ficha</b>, aunque trabaje en dos lugares. Lo que dice en qué pestaña aparece son sus <b>cargos</b>: cada cargo pertenece a una pestaña.</p>
+  <p>Por ejemplo, un docente con Matemática (ID 104512) y Física (ID 104513) en el CEPJA 11, y Matemática (ID 207720) en el CEPJA 14, aparece en las dos pestañas. En el CEPJA 11 se ven sus dos cátedras de ahí y la etiqueta <span class="pes">también en CEPJA 14</span>. Es siempre la misma ficha.</p>
+  <ul>
+    <li><b>Licencias que se cuentan juntas</b> (por ejemplo, <span class="art">1°</span> enfermedad y el 13° familiar enfermo): el tope suma los días de todos sus cargos, en todas las pestañas.</li>
+    <li><b>Licencias que se cuentan por cargo</b> (el <span class="art p">20° b</span>): cada cargo tiene su propio tope de 6 días por año y 2 por mes.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6. La pantalla de Inicio</h2>
+  <p>En una pestaña muestra lo de ese grupo; en <b>Todos</b>, lo de toda la supervisión, más una tabla con una fila por pestaña:</p>
+  <img class="alto" src="img/05-todos.png" alt="Inicio en Todos">
+  <ul>
+    <li><b>Las tres tarjetas:</b> cuántas personas tienen licencia en la semana, cuántas licencias tienen trámites sin completar y cuántas notas hay para ese día.</li>
+    <li><b>Trámites pendientes:</b> licencias a las que les falta algún paso: <span class="tram">SOL</span> solicitud, <span class="tram">SAG</span> cargado en SAGE y <span class="tram">UG</span> elevado a UG. Cuando un paso está hecho, se pone con tilde <span class="tram ok">✓</span>.</li>
+    <li><b>Por pestaña</b> (sólo en Todos): personas, cuántas están de licencia ese día, trámites pendientes y días de ausencia en el mes. Tocando una fila vas a esa pestaña.</li>
+    <li><b>La semana</b> de lunes a viernes, con los feriados, las licencias y las notas. Con las flechas <b>‹ ›</b> te movés y con <span class="btn">Hoy</span> volvés al día de hoy.</li>
+  </ul>
+</section>
+
+<section class="salto">
+  <h2>7. Cargar una persona</h2>
+  <ol>
+    <li>Elegí la pestaña donde trabaja (por ejemplo, <b>CEPJA 11</b>), andá a <b>Agentes</b> y tocá <span class="btn">+ Nuevo agente</span>.</li>
+    <li>Completá apellido, nombre y los datos de la planilla: DNI, CUIL, fecha de nacimiento, legajos, etc. Lo que no tengas, dejalo vacío.</li>
+    <li>En <b>Cargos</b>, cada cargo ya viene con la <b>pestaña</b> en la que estás. En los CEPJA poné la <b>cátedra</b> y el <b>ID</b>, y si tiene más de una cátedra, tocá <span class="btn">+ Agregar cargo</span> (puede haber varios ID en el mismo CEPJA).</li>
+    <li>En <b>Días y horario de trabajo</b>, tildá los días de cada turno (mañana, tarde o vespertino/noche).</li>
+    <li>Tocá <span class="btn pz">Guardar agente</span>.</li>
+  </ol>
+  <img class="alto" src="img/08-nuevo-agente.png" alt="Nueva persona en un CEPJA">
+  <p><b>Directores:</b> al elegir la pestaña Directores, el cargo pide la <b>escuela</b> a la que pertenece:</p>
+  <img class="mitad" src="img/08b-cargo-escuela.png" alt="Cargo de director con escuela">
+  <div class="caja warn"><b>Si la persona ya está en otra pestaña, no la cargues de nuevo.</b>Abrí su ficha (con el buscador de arriba), tocá <span class="btn">Editar datos</span> y agregale un cargo eligiendo la otra pestaña. Si igual intentás cargarla con el mismo DNI, la app te avisa en qué pestaña está.</div>
+  <div class="caja"><b>Si alguien deja de trabajar,</b>no lo borres: en "Editar datos" marcá <b>"Dado de baja"</b>, o poné la fecha de baja en el cargo que deja. Así conserva todo su historial.</div>
+</section>
+
+<section class="salto">
+  <h2>8. Cargar una licencia</h2>
+  <ol>
+    <li>Tocá el botón verde <span class="btn ol">+ Licencia</span> (está siempre arriba).</li>
+    <li>En <b>Agente</b>, escribí parte del apellido o el DNI y elegilo de la lista.</li>
+    <li>Elegí el <b>Artículo</b>. Abajo aparece un recuadro con lo que dice la resolución.</li>
+    <li>Poné la fecha <b>Desde</b> y la <b>cantidad de días</b> (o la fecha <b>Hasta</b>). La otra se calcula sola, descontando fines de semana y feriados cuando el artículo cuenta días hábiles.</li>
+    <li>Si tiene más de un cargo, revisá los <b>Cargos afectados</b>: marcá los cargos en los que falta. La licencia aparece en la pestaña de cada cargo marcado.</li>
+    <li>Tildá los <b>trámites</b> que ya están hechos y tocá <span class="btn pz">Guardar</span>.</li>
+  </ol>
+  <img class="alto" src="img/09-licencia.png" alt="Carga de una licencia de 20° b en un cargo">
+  <div class="caja"><b>Los cargos se marcan solos así:</b>para un artículo que se cuenta por cargo, como el 20° b, se marcan sólo los cargos de la pestaña en la que estás. Para los demás (enfermedad, familiar, etc.) se marcan todos. Siempre podés cambiarlos a mano.</div>
+  <div class="caja warn"><b>Los avisos en amarillo no te frenan: te avisan.</b>Por ejemplo, si con esta licencia se pasa del tope (y en qué cargo), o si se superpone con otra. Leelos y, si está bien así, guardá igual. Los avisos en <b>rojo</b> sí hay que corregirlos.</div>
+  <p><b>Las licencias cargadas a futuro</b> cuentan para el tope desde el momento en que las cargás. Para corregir o borrar una licencia, tocala (en la ficha, en Inicio o en Reportes); abajo a la izquierda está <span class="btn">Borrar</span>, y durante unos segundos aparece <b>"Deshacer"</b>.</p>
+</section>
+
+<section class="salto">
+  <h2>9. Consultar la ficha de una persona</h2>
+  <p>Arriba, en <b>"Buscar agente…"</b>, escribí el apellido y elegilo. Se abre su ficha completa, con todas sus licencias de todas las pestañas. Al lado del nombre están las pestañas donde trabaja.</p>
+  <img class="alto" src="img/10-ficha.png" alt="Ficha de una persona">
+  <ul>
+    <li><b>Planilla anual:</b> como la planilla amarilla. Cada día con licencia muestra el artículo con un color según el tipo; los días que trabaja van en amarillo claro.</li>
+    <li><b>Por artículo:</b> días usados, tope y cuántos le quedan. Los que se cuentan por cargo (20° b) tienen una fila por cada cargo, con su pestaña.</li>
+    <li><b>Licencias:</b> la lista, con los cargos que toca cada una.</li>
+    <li><b>Datos y horario:</b> datos personales y la tabla de cargos, con la pestaña ("Dónde"), cátedra, ID, horas, curso y carácter.</li>
+    <li><span class="btn">Imprimir planilla</span> imprime la ficha con el formato de la planilla, más el resumen.</li>
+  </ul>
+  <img src="img/11-ficha-articulos.png" alt="Pestaña Por artículo">
+</section>
+
+<section class="evitar">
+  <p>En <b>Agentes</b> está la lista de la pestaña: DNI, el <b>ID y la cátedra</b> de cada cargo en esa pestaña, los días que faltó y el detalle por artículo (por ejemplo <span class="art">1°</span> 9 son 9 días por artículo 1°). En el celular el ID y la cátedra aparecen debajo del nombre.</p>
+  <img src="img/07-lista-cepja.png" alt="Lista de un CEPJA">
+  <img class="celu" src="img/22-celu-lista.png" alt="Lista en el celular">
+</section>
+
+<section>
+  <h2>10. Notas del día</h2>
+  <div class="dos">
+    <div>
+      <p>En <b>Inicio</b>, tocá <span class="btn">+ Nota</span> en "Notas del día" o debajo de cualquier día de la semana. Escribí la nota y tocá <span class="btn pz">Guardar nota</span>. Para corregirla o borrarla, tocala.</p>
+      <ul>
+        <li>Una nota escrita <b>dentro de una pestaña</b> se ve en esa pestaña y en Todos.</li>
+        <li>Una nota escrita <b>en Todos</b> es general: se ve en todas las pestañas.</li>
+      </ul>
+    </div>
+    <img class="mitad" src="img/12-nota.png" alt="Nueva nota">
+  </div>
+</section>
+
+<section>
+  <h2>11. Reportes y nómina</h2>
+  <p>En <b>Reportes</b> hay dos pestañas, y las dos muestran lo de la pestaña elegida arriba (o todo, en Todos).</p>
+  <h3>Licencias</h3>
+  <p>Elegís un período (o "Este mes", "Mes anterior", "Este año") y, si querés, un artículo. Muestra cuántas licencias y cuántos días hábiles faltó cada persona, cuántos días de clase faltó y trabajó, y el listado de licencias del período.</p>
+  <img src="img/13-reportes.png" alt="Reportes de licencias">
+  <h3>Nómina del personal</h3>
+  <p>El padrón con <b>CUIL, legajos, pestaña, ID, cátedra o escuela y fecha de nacimiento</b>.</p>
+  <img src="img/14-nomina.png" alt="Nómina">
+  <p><span class="btn">Descargar Excel (CSV)</span> lo baja para abrir en Excel (en la nómina, una fila por cargo) e <span class="btn">Imprimir</span> lo imprime.</p>
+</section>
+
+<section>
+  <h2>12. Días de clase (ciclo lectivo)</h2>
+  <p>Para que la app calcule cuántos días de clase hubo y cuántos trabajó cada persona, hay que cargar cuándo empiezan y terminan las clases: <b>Ajustes → Feriados y asuetos</b>, recuadro <b>"Ciclo lectivo"</b>. El calendario es el de la provincia, igual para todas las pestañas.</p>
+  <img src="img/15-calendario.png" alt="Ciclo lectivo y feriados">
+  <div class="caja"><b>Para tener en cuenta:</b>los días que todavía no pasaron no cuentan como trabajados, y hay que cargar el ciclo de cada año (el de 2027, pasando de año con las flechas).</div>
+</section>
+
+<section>
+  <h2>13. Feriados, artículos y topes (Ajustes)</h2>
+  <ul>
+    <li><b>Feriados y asuetos:</b> ya están los de 2026 y 2027. Para agregar uno, poné la fecha, el tipo y la descripción y tocá <span class="btn pz">Agregar</span>. Deja de contarse como día hábil.</li>
+    <li><b>Artículos y topes:</b> de cada artículo podés cambiar el nombre corto, si cuenta días hábiles o corridos, el tope anual, el máximo por mes, el máximo por licencia y los trámites. Los marcados <b>"Revisar"</b> conviene confirmarlos con la normativa.</li>
+    <li>La columna <b>Tope</b> dice si se cuenta <b>Por persona</b> (todos sus cargos juntos) o <b>Por cargo</b>. Por ahora, sólo el 20° b es por cargo.</li>
+  </ul>
+  <img src="img/16-articulos.png" alt="Artículos y topes">
+</section>
+
+<section>
+  <h2>14. Pestañas (para quien administra)</h2>
+  <p>En <b>Ajustes → Pestañas</b> se agregan, renombran, ordenan y archivan los grupos:</p>
+  <img src="img/17-pestanas.png" alt="Ajustes, Pestañas">
+  <ul>
+    <li><span class="btn">+ Agregar pestaña</span> crea una nueva (por ejemplo, un CEPJA más). Escribile el nombre y el detalle (barrio o localidad).</li>
+    <li><b>Tipo:</b> "Centro (cátedra e ID)" para los CEPJA, "Directores (con escuela)" si cada cargo tiene que decir la escuela, o "Equipo".</li>
+    <li><span class="btn">Archivar</span> oculta la pestaña <b>sin borrar a nadie</b>: sus personas y licencias siguen guardadas. Con <span class="btn">Recuperar</span> vuelve.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>15. Usuarios (para quien administra)</h2>
+  <p>Quien administra ve en <b>Ajustes</b> la pestaña <b>Usuarios</b>:</p>
+  <img src="img/18-usuarios.png" alt="Usuarios y código">
+  <ul>
+    <li><b>Código de la supervisión:</b> el que hay que pasarle a cada persona para que cree su cuenta. Si se lo pasaste a alguien que no debía tenerlo, tocá <span class="btn">Generar uno nuevo</span>: el viejo deja de servir, pero los que ya tienen cuenta siguen entrando.</li>
+    <li><b>Tipo:</b> se cambia con la lista de cada persona.</li>
+    <li><span class="btn">Dar de baja</span>: desde ese momento esa persona no puede ver ni cargar nada. Se puede reactivar.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>16. Respaldo de los datos</h2>
+  <p>Los datos están en el servidor, así que no se pierden si se rompe una compu. Igual hay tres redes de seguridad:</p>
+  <ul>
+    <li><b>Copia automática todas las noches</b>, en el Google Drive de las cuentas dueñas del proyecto (carpeta <b>Copias Licencias Supervisión</b>).</li>
+    <li><b>Copia en cada compu:</b> mientras usás la app, la compu guarda sola una copia, por si algún día no anda el servidor (punto 17).</li>
+    <li><b>Exportar copia:</b> baja un archivo con todos los datos. Conviene hacerlo una vez por semana y guardarlo en un pendrive. La app lo recuerda con un aviso amarillo.</li>
+  </ul>
+  <img src="img/19-respaldo.png" alt="Datos y respaldo">
+  <table>
+    <tr><th style="width:30%">Botón</th><th>Qué hace</th></tr>
+    <tr><td><b>Sumar una copia…</b></td><td>Agrega lo que la copia tiene de nuevo, <b>sin borrar nada</b>. Es la que se usa para juntar lo que se cargó en modo emergencia. Sumar dos veces la misma copia no duplica nada.</td></tr>
+    <tr><td><b>Importar copia…</b><br><span style="font-weight:400;color:#585e67">(sólo quien administra)</span></td><td><b>Reemplaza todo</b> por lo que tiene la copia. Es para volver atrás si algo se rompió mucho. Lo que se cargó después se pierde.</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>17. Si no anda el servidor</h2>
+  <div class="dos">
+    <div>
+      <p>Si algún día la app no puede conectarse, en la pantalla de ingreso aparece <b>"Usar la copia de esta compu"</b>. Tocándolo entrás en <b>modo emergencia</b>, con los datos como estaban la última vez que usaste la app en esa compu.</p>
+      <ol>
+        <li>Cargá como siempre. Queda guardado <b>sólo en esa compu</b>.</li>
+        <li>Al terminar cada día, tocá <span class="btn">Exportar copia</span>.</li>
+        <li>Cuando el servidor vuelve, entrá normal y juntalo con <b>Ajustes → Datos y respaldo → Sumar una copia…</b></li>
+      </ol>
+    </div>
+    <img class="mitad" src="img/20-ingreso-emergencia.png" alt="Opción de emergencia">
+  </div>
+  <img src="img/21-emergencia.png" alt="Modo emergencia">
+  <div class="caja"><b>Si la página ni siquiera abre,</b>usá el link de respaldo (santifarah1.github.io/Supervision) y cargá ahí. Después, lo mismo: Exportar copia y Sumar una copia.</div>
+</section>
+
+<section>
+  <h2>18. Si algo no anda</h2>
+  <table>
+    <tr><th style="width:38%">Pasa esto…</th><th>Hacé esto</th></tr>
+    <tr><td>Dice "El código de la supervisión no es correcto"</td><td>Revisá que esté completo, con los guiones. Si sigue, pedíselo de nuevo a quien administra: puede que lo haya cambiado.</td></tr>
+    <tr><td>Dice que tu acceso está dado de baja</td><td>Avisale a quien administra para que te reactive.</td></tr>
+    <tr><td>No encuentro a una persona</td><td>Fijate en qué pestaña estás (o pasá a <b>Todos</b>), y tildá "Mostrar dados de baja".</td></tr>
+    <tr><td>Una persona aparece dos veces</td><td>Tiene que tener una sola ficha. Avisale a quien administra: se pasan las licencias a una ficha y se borra la otra.</td></tr>
+    <tr><td>Una licencia no aparece en un CEPJA</td><td>Abrila y mirá los <b>Cargos afectados</b>: aparece sólo en la pestaña de los cargos marcados.</td></tr>
+    <tr><td>El indicador dice "Sin conexión"</td><td>Seguí cargando: se sube solo cuando vuelve internet. No cierres la sesión mientras tanto.</td></tr>
+    <tr><td>Borré algo sin querer</td><td>Tocá "Deshacer" enseguida. Si ya pasó, quien administra lo recupera de la copia de la noche anterior.</td></tr>
+    <tr><td>La app se ve como antes después de un cambio</td><td>Recargá la página con <b>Ctrl + F5</b>. Los datos no se tocan.</td></tr>
+    <tr><td>Un número no coincide con lo que calculo yo</td><td>Abrí la licencia y mirá el recuadro gris: dice qué días contó y cuáles no. Si sigue sin coincidir, sacale una foto a la pantalla y mandásela a quien administra.</td></tr>
+  </table>
+  <p class="pie-final">Licencias · Supervisión Secundaria Zona I Valle Inferior · guía de uso · noviembre 2026</p>
+</section>
+
+</body>
+</html>

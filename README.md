@@ -1,5 +1,6 @@
 # Licencias · Supervisión Secundaria Zona I Valle Inferior
 
+> **Instructivo para quienes usan la app:** [Guía de uso en PDF](docs/Guia-Licencias-Supervision-Zona-I.pdf).
 > Si algo no anda (la página no abre, se cargó algo mal, alguien olvidó la contraseña…), mirá **[Qué hacer si…](docs/que-hacer-si.md)**.
 
 App para llevar las licencias del personal que depende de la supervisión: directores, equipo supervisivo y docentes de los CEPJA. Es la misma idea que la app de Licencias de la ESRN Rural Virtual (de ahí viene el código), adaptada para varios grupos "juntos pero separados".
