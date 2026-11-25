@@ -1660,7 +1660,7 @@ function abrirRespaldo() {
 function renderBanners() {
   const b = [];
   // Link viejo (GitHub Pages sin ?nube): la app se mudó; sigue andando como plan B
-  if (EN_LINK_VIEJO && !Nube.activa() && !EN_EMERGENCIA) b.push(`<div class="banner warn">${ico('info')}<div class="txt"><b>La app se mudó a <a href="https://licencias-esrn.web.app">licencias-esrn.web.app</a></b>, con usuario y contraseña. Este link queda sólo como respaldo: si cargás acá, queda guardado sólo en esta compu.</div><a class="btn sm primary" href="https://licencias-esrn.web.app">Ir a la app</a></div>`);
+  if (EN_LINK_VIEJO && URL_APP && !Nube.activa() && !EN_EMERGENCIA) b.push(`<div class="banner warn">${ico('info')}<div class="txt"><b>Este es el link de respaldo.</b> La app de todos los días está en <a href="${URL_APP}">${URL_APP.replace('https://', '')}</a>, con usuario y contraseña. Si cargás acá, queda guardado sólo en esta compu.</div><a class="btn sm primary" href="${URL_APP}">Ir a la app</a></div>`);
   if (EN_EMERGENCIA) {
     const info = (() => { try { return JSON.parse(LS.getItem(EMERGENCIA_INFO_KEY) || '{}'); } catch (e) { return {}; } })();
     b.push(`<div class="banner err">${ico('alerta')}<div class="txt"><b>Modo emergencia:</b> estás usando la copia de esta compu${info.fecha ? ' del ' + esc(fmtFechaHora(info.fecha)) : ''}. ${modoLectura ? 'Sólo para consultar.' : 'Lo que cargues queda <b>sólo en esta compu</b>: al terminar cada día tocá "Exportar copia" y, cuando vuelva el servidor, quien administra la suma con "Sumar una copia".'}</div>
@@ -2188,24 +2188,28 @@ function ajustesArticulos(ctx) {
     </tbody></table></div></div>`;
 }
 /* Pestañas: agregar, renombrar o archivar. Archivar no borra nada: la pestaña se oculta y se puede recuperar. */
+function puedeEditarPestanas() { return !modoLectura && (!NubeDatos.activos() || Nube.esAdmin()); }
 function ajustesPestanas(ctx) {
-  const dis = modoLectura ? 'disabled' : '';
+  const dis = puedeEditarPestanas() ? '' : 'disabled';
+  const editar = puedeEditarPestanas();
   const todas = todasLasPestanas();
   const cuantos = id => ctx.agTodos.filter(a => cargosEn(a, id).length).length;
   return `<div class="stack">
     <p class="small muted">Cada pestaña es un grupo de personas: los directores, el equipo supervisivo, cada CEPJA. Una persona puede estar en más de una (con un cargo en cada una) y tiene una sola ficha. Archivar una pestaña la oculta sin borrar a nadie: sus personas y licencias siguen guardadas y se puede recuperar.</p>
-    <section class="card"><div class="card-h"><h2>Pestañas</h2><span class="spacer"></span>${modoLectura ? '' : `<button class="btn sm" data-act="pes-nueva">${ico('mas', 'sm')}Agregar pestaña</button>`}</div>
+    ${editar || modoLectura ? '' : '<div class="msg info small">Las pestañas las cambia sólo quien administra la app.</div>'}
+    <section class="card"><div class="card-h"><h2>Pestañas</h2><span class="spacer"></span>${!editar ? '' : `<button class="btn sm" data-act="pes-nueva">${ico('mas', 'sm')}Agregar pestaña</button>`}</div>
       <table class="t"><thead><tr><th>Nombre</th><th>Detalle</th><th>Tipo</th><th class="num c">Personas</th><th></th></tr></thead><tbody>
       ${todas.map((p, i) => `<tr data-pes="${esc(p.id)}" ${p.archivada ? 'class="muted"' : ''}>
         <td><input class="in" value="${esc(p.nombre)}" data-on="pes-campo" data-campo="nombre" aria-label="Nombre de la pestaña" ${dis}></td>
         <td><input class="in" value="${esc(p.detalle || '')}" data-on="pes-campo" data-campo="detalle" placeholder="Ej.: localidad o barrio" aria-label="Detalle" ${dis}></td>
         <td><select class="in" data-on="pes-campo" data-campo="tipo" aria-label="Tipo" ${dis}>${Object.entries(TIPOS_PESTANA).map(([k, v]) => `<option value="${k}" ${p.tipo === k ? 'selected' : ''}>${v}</option>`).join('')}</select></td>
         <td class="num c">${cuantos(p.id)}</td>
-        <td class="row">${modoLectura ? '' : `${i > 0 ? `<button class="iconbtn" title="Subir" aria-label="Subir" data-act="pes-mover" data-v="${esc(p.id)}" data-n="-1">${ico('izq')}</button>` : ''}
+        <td class="row">${!editar ? '' : `${i > 0 ? `<button class="iconbtn" title="Subir" aria-label="Subir" data-act="pes-mover" data-v="${esc(p.id)}" data-n="-1">${ico('izq')}</button>` : ''}
           <button class="btn sm ${p.archivada ? '' : 'ghost'}" data-act="pes-archivar" data-v="${esc(p.id)}">${p.archivada ? 'Recuperar' : 'Archivar'}</button>`}</td></tr>`).join('')}
       </tbody></table></section></div>`;
 }
 function cambiarPestanas(fn, msg) {
+  if (!puedeEditarPestanas()) { toast('Las pestañas las cambia sólo quien administra la app.'); return; }
   mutar(e => { e.config.pestanas = structuredClone(todasLasPestanas(e)); fn(e.config.pestanas); }, { msg });
 }
 function ajustesGeneral() {
@@ -3014,19 +3018,21 @@ window.addEventListener('afterprint', () => { $('#print-area').innerHTML = ''; }
    ========================================================================= */
 /* =========================================================================
    7. NUBE: USUARIOS CON FIREBASE
-   Por ahora la nube se activa sólo entrando con ?nube al final del link
-   (o poniendo NUBE_POR_DEFECTO en true). En los links propios de Firebase (licencias-esrn.web.app
-   y .firebaseapp.com) la nube está siempre activa. Sin eso, la app funciona exactamente como antes
-   (sin usuarios, datos en este navegador y en el archivo de Drive).
+   En el link propio de Firebase (https://<proyecto>.web.app) siempre se entra con usuario.
+   En cualquier otro lado (el link de respaldo de GitHub Pages, o el archivo abierto en la compu)
+   la app funciona sin servidor: datos en este navegador y en el archivo de Drive. Es el plan B.
+   Con ?nube al final de cualquier link también se entra con usuario.
    Para probar con el emulador local: abrir la app con ?emulador desde localhost o file://.
    Etapa 2: ingreso, registro con código de la supervisión y tipos de usuario.
    Etapa 3: con la nube activa, los datos se guardan en el servidor (ver NubeDatos).
    ========================================================================= */
-// Proyecto de Firebase propio de la supervisión: todavía no está creado (se suma en un PR aparte).
-// Mientras tanto la app funciona sin servidor: datos en este navegador y en un archivo de Drive.
+// Proyecto de Firebase de la supervisión. Mientras esté en null, la app funciona sin servidor.
+// Cuando se crea el proyecto (docs/puesta-en-marcha.md, paso 4), acá va el "firebaseConfig" que da la consola.
 // Estos datos no son secretos (van en la página): la seguridad la dan las reglas.
 const FIREBASE_CONFIG = null;
-const EN_LINK_VIEJO = false;
+// Link de la app con usuarios, y el link de respaldo (GitHub Pages: guarda sólo en la compu)
+const URL_APP = FIREBASE_CONFIG ? `https://${FIREBASE_CONFIG.projectId}.web.app` : '';
+const EN_LINK_VIEJO = /\.github\.io$/.test(location.hostname);
 const NUBE_POR_DEFECTO = false; // en true cuando todos pasen a usar usuarios (etapa 4)
 // El link propio de Firebase es el sistema nuevo: ahí siempre se entra con usuario
 const EN_LINK_FIREBASE = /\.(web\.app|firebaseapp\.com)$/.test(location.hostname);

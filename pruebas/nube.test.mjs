@@ -191,3 +191,21 @@ test('Copias: quien carga puede "Sumar una copia" pero no "Importar copia"; cons
   assert.equal(await D.locator('[data-act="importar-sumar"], #main [data-act="importar"]').count(), 0);
   await ctxD.close();
 });
+
+test('Pestañas con usuarios: las cambia sólo quien administra y les llegan a todos', async () => {
+  const ctxA = await contexto(b), ctxM = await contexto(b);
+  const A = await entrar(ctxA, 'santi@prueba.com');
+  const M = await entrar(ctxM, 'mama@prueba.com');
+  // quien carga ve las pestañas pero no las puede cambiar
+  await M.evaluate(() => { ui.ajustesTab = 'pestanas'; location.hash = '#ajustes'; render(); });
+  assert.equal(await M.locator('[data-act="pes-nueva"]').count(), 0, 'carga no debería poder agregar pestañas');
+  assert.ok(await M.locator('[data-on="pes-campo"]').first().isDisabled());
+  // el admin renombra una y la de carga la ve cambiada sin recargar
+  await A.evaluate(() => { cambiarPestanas(ps => { ps.find(x => x.id === 'cepja-35').detalle = 'Unidad Penal 1'; }); });
+  await esperar(M, () => pestanaPorId('cepja-35')?.detalle === 'Unidad Penal 1');
+  // una persona cargada en un CEPJA aparece en esa pestaña en la otra compu
+  await A.evaluate(() => { mutar(e => { e.agentes.push(sellar({ apellido: 'Nube', nombre: 'Pestaña', regimen: '233', cargos: [sellar({ pestana: 'cepja-53', catedra: 'Química', idCargo: '9001' })] })); }); });
+  await esperar(M, () => contexto(estado, 'cepja-53').agentes.some(a => a.apellido === 'Nube'));
+  sinErrores(A); sinErrores(M);
+  await ctxA.close(); await ctxM.close();
+});

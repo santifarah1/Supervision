@@ -1,0 +1,64 @@
+# Publica la app en Firebase Hosting (https://<proyecto>.web.app) y las reglas de seguridad
+# cada vez que se mergea algo a main.
+#
+# Entra a Google sin ninguna llave guardada: GitHub le muestra a Google un pase que dura
+# minutos y sólo sirve para este repositorio desde main (Workload Identity Federation,
+# ver docs/puesta-en-marcha.md). No hay ningún secreto cargado en GitHub.
+#
+# Mientras PROYECTO esté vacío (el proyecto de Firebase todavía no existe), no hace nada.
+name: Publicar en Firebase
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # para pedir el pase de GitHub
+
+concurrency:
+  group: publicar-firebase
+  cancel-in-progress: false
+
+env:
+  # Se completan cuando se crea el proyecto (docs/puesta-en-marcha.md, paso 7).
+  # No son secretos: sólo dicen a qué puerta de Google golpear y con qué cuenta.
+  PROYECTO: ''
+  NUMERO_PROYECTO: ''
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ¿Ya está el proyecto?
+        id: listo
+        run: |
+          if [ -z "$PROYECTO" ] || [ -z "$NUMERO_PROYECTO" ]; then
+            echo "::notice::Todavía no hay proyecto de Firebase configurado: no se publica nada."
+            echo "si=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "si=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.listo.outputs.si == 'si'
+
+      - uses: actions/setup-node@v4
+        if: steps.listo.outputs.si == 'si'
+        with:
+          node-version: 22
+
+      - name: Entrar a Google sin llave
+        if: steps.listo.outputs.si == 'si'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/${{ env.NUMERO_PROYECTO }}/locations/global/workloadIdentityPools/github/providers/supervision
+          service_account: github-publicar@${{ env.PROYECTO }}.iam.gserviceaccount.com
+
+      - name: Publicar la app y las reglas
+        if: steps.listo.outputs.si == 'si'
+        run: |
+          # Se publica sólo la app: nada de pruebas, herramientas ni configuración
+          rm -rf publico && mkdir publico && cp index.html publico/
+          npx --yes firebase-tools@15.37.0 deploy --only hosting,firestore:rules --project "$PROYECTO" --non-interactive

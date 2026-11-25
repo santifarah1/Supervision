@@ -1,5 +1,7 @@
 # Licencias · Supervisión Secundaria Zona I Valle Inferior
 
+> Si algo no anda (la página no abre, se cargó algo mal, alguien olvidó la contraseña…), mirá **[Qué hacer si…](docs/que-hacer-si.md)**.
+
 App para llevar las licencias del personal que depende de la supervisión: directores, equipo supervisivo y docentes de los CEPJA. Es la misma idea que la app de Licencias de la ESRN Rural Virtual (de ahí viene el código), adaptada para varios grupos "juntos pero separados".
 
 Es un solo archivo, `index.html`. No hay que instalar nada para usarla: se abre en el navegador (mejor Google Chrome o Microsoft Edge).
@@ -26,13 +28,23 @@ Al cargar una licencia se marcan los cargos en los que la persona falta. Una lic
 
 Sólo hay docentes de la Res. 233/98 (no hay PSA). El calendario de feriados y asuetos es el de la provincia, igual para todas las pestañas.
 
-## Dónde se guardan los datos (por ahora)
+## Dónde se guardan los datos
 
-Todavía **no hay servidor**: los datos quedan en el navegador de la compu donde se cargan y, si se elige, en un archivo dentro de una carpeta de Google Drive u OneDrive de la compu (Ajustes → Datos y respaldo). La supervisora puede abrir ese archivo en modo "Sólo consultar".
+**Con servidor (Firebase).** En el link propio de la app (`https://<proyecto>.web.app`) se entra con usuario y contraseña y los datos quedan en el servidor, compartidos entre todas las compus. Hay tres tipos de usuario:
 
-Conviene tocar **Exportar copia** seguido y guardar el archivo en otro lado (pendrive o mail).
+| Tipo | Quién | Qué puede hacer |
+|---|---|---|
+| Administra | Quien maneja la app | Todo, más los usuarios, el código de la supervisión y las pestañas |
+| Carga | Los secretarios | Cargar y editar personas, licencias y notas |
+| Consulta | La supervisora | Ver todo, sin modificar |
 
-El paso siguiente es sumar un proyecto propio de Firebase, con usuario y contraseña para los tres secretarios (cargan), la supervisora (sólo consulta) y quien administra. Eso va en un cambio aparte, siguiendo lo que se aprendió con la app de la escuela: una cuenta de Google con historia, una segunda dueña desde el primer día, nada de llaves descargables y copia nocturna fuera de Firebase. Ya está todo el código de usuarios, modo sin internet y modo emergencia heredado de Licencias; sólo falta el proyecto.
+Para crear una cuenta hace falta el **código de la supervisión**, que controla el servidor (`firestore.rules`). Sigue andando sin internet y tiene modo emergencia con la copia guardada en la compu. Además hay una copia de todas las noches en el Drive de cada cuenta dueña ([`herramientas/copia-diaria`](herramientas/copia-diaria/LEEME.md)).
+
+Cómo se crea el proyecto, paso a paso: **[Puesta en marcha](docs/puesta-en-marcha.md)**. Mientras no esté creado, `FIREBASE_CONFIG` está vacío en `index.html` y la app funciona sin servidor.
+
+**Sin servidor (plan B).** Abriendo `index.html` en la compu, o en el link de respaldo de GitHub Pages, la app guarda en el navegador y, si se elige, en un archivo de una carpeta de Google Drive u OneDrive (Ajustes → Datos y respaldo). Conviene tocar **Exportar copia** seguido.
+
+**Publicación.** Cada vez que se mergea algo a `main`, GitHub publica la app y las reglas en Firebase (`.github/workflows/publicar-firebase.yml`), sin ninguna llave guardada: usa un pase que dura minutos y sólo sirve para este repositorio desde `main`.
 
 ## Pruebas automáticas
 
