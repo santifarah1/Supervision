@@ -3373,8 +3373,8 @@ function vistaIngreso() {
   const dis = ingreso.ocupado ? 'disabled' : '';
   const google = `<button type="button" class="btn w-full" data-act="ingreso-google" ${dis}>${ICONO_GOOGLE}Continuar con Google</button>`;
   const rolElegir = `<fieldset class="roles"><legend class="lbl">¿Qué vas a hacer en la app?</legend>
-      <label class="rol-op"><input type="radio" name="rol" value="carga" ${c.rol !== 'consulta' ? 'checked' : ''}><span><b>Cargo licencias</b><span class="muted small">Cargar y editar agentes, licencias y notas.</span></span></label>
-      <label class="rol-op"><input type="radio" name="rol" value="consulta" ${c.rol === 'consulta' ? 'checked' : ''}><span><b>Solo consulto</b><span class="muted small">Ver todo, sin poder modificar (directivos).</span></span></label></fieldset>`;
+      <label class="rol-op"><input type="radio" name="rol" value="carga" ${c.rol !== 'consulta' ? 'checked' : ''}><span><b>Cargo licencias</b><span class="muted small">Cargar y editar personas, licencias y notas (secretarios).</span></span></label>
+      <label class="rol-op"><input type="radio" name="rol" value="consulta" ${c.rol === 'consulta' ? 'checked' : ''}><span><b>Solo consulto</b><span class="muted small">Ver todo, sin poder modificar (supervisora).</span></span></label></fieldset>`;
   const codigo = `<label class="f">Código de la supervisión<input class="in" name="codigo" value="${v('codigo')}" autocomplete="off" autocapitalize="characters" placeholder="Te lo pasa quien administra la app" required></label>`;
   let cuerpo = '';
   if (Nube.estado === 'cargando' || Nube.estado === 'apagada') cuerpo = `<p class="muted">Conectando…</p>`;
