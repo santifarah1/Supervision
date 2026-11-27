@@ -99,7 +99,7 @@ test('POF: la suplencia de un ID sale de las fechas de alta y se ve en la lista'
   const p = await app();
   await importar(p, await pdfPOF('pof.pdf', FILAS));
   const sup = await p.evaluate(() => { const ctx = contexto(); return vivos(estado.agentes).flatMap(a => vivos(a.cargos).map(c => suplenciaDe(a, c, ctx)).filter(Boolean)); });
-  assert.deepEqual(sup, ['Dueño/a del cargo, de licencia: la/lo suplanta ROSSI, Marta Del Carmen (alta 12/02/2026)', 'Suplente de LOPEZ, Ana (alta 17/02/2023)']);
+  assert.deepEqual(sup, ['Interino/a, de licencia: la/lo suplanta ROSSI, Marta Del Carmen (alta 12/02/2026)', 'Suplente de LOPEZ, Ana (alta 17/02/2023)']);
   assert.match(await p.locator('#lista-agentes').innerText(), /Suplente de LOPEZ, Ana/);
   sinErrores(p); await p.close();
 });
