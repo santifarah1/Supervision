@@ -575,6 +575,11 @@ main{max-width:var(--contenido);padding:28px var(--gutter) 48px}
 .pchip{display:inline-block;font-size:var(--t-xs);font-weight:700;line-height:1.5;border-radius:var(--r-full);padding:0 8px;background:var(--acento-suave);color:var(--acento-tinta);border:1px solid var(--acento-linea);white-space:nowrap}
 .pchip.otro{background:var(--n-0);color:var(--n-500);border-color:var(--n-200)}
 .pes-tit{font-size:var(--t-xs);color:var(--n-500);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.pof-lista{list-style:none;margin:0;padding:0;display:grid;gap:var(--s3)}
+.pof-persona{border:1px solid var(--n-200);border-radius:var(--r-md);padding:var(--s3)}
+.pof-cargos{margin:var(--s2) 0 0;padding-left:var(--s4);display:grid;gap:4px;font-size:var(--t-sm)}
+.pof-nombre{margin:0}
+.suple{display:block;font-size:var(--t-xs);color:var(--warn)}
 .solo-m{display:none}
 @media (max-width:720px){.solo-m{display:block}.pestanas-in{padding:8px 12px}}
 /* ============ 6. Movimiento e impresión ============ */
@@ -629,6 +634,7 @@ main{max-width:var(--contenido);padding:28px var(--gutter) 48px}
 <div id="toast-root"></div>
 <div id="print-area"></div>
 <input type="file" id="file-import" accept=".json,application/json" hidden>
+<input type="file" id="file-pof" accept=".pdf,application/pdf" hidden>
 <input type="file" id="file-consulta" accept=".json,application/json" hidden>
 
 <script>
@@ -1805,6 +1811,7 @@ function resumenPorPestana(ctx, f) {
 function vistaAgentes(ctx) {
   return `<div class="stack">
     <div class="page-h"><div><div class="pes-tit">${esc(ctx.pes ? nombrePestana(ctx.pes, { largo: true }) : 'Toda la supervisión')}</div><h1 class="sr-only">Agentes</h1><span class="sub-h"><span id="cuenta-agentes"></span> · licencias de ${ui.anio}</span></div><span class="spacer"></span>
+      ${modoLectura || !ctx.pes ? '' : `<button class="btn" data-act="importar-pof" title="Cargar las personas y cargos desde la Planta Orgánica Nominal en PDF">${ico('archivo')}Importar planta (POF)</button>`}
       ${modoLectura ? '' : `<button class="btn" data-act="nuevo-agente">${ico('mas')}Nuevo agente</button>`}</div>
     <div class="row">
       <label class="buscar">${ico('buscar')}<input class="in" placeholder="Buscar por apellido, DNI, cátedra o ID de cargo…" value="${esc(ui.busqueda)}" data-on="buscar-agentes" aria-label="Buscar agente" autofocus></label>
@@ -1846,7 +1853,7 @@ function listaAgentes(ctx) {
         <td><span class="nombre">${esc(nombreAgente(a))}</span><div class="ag-meta">${a.dni ? `<span>DNI ${esc(Number(a.dni) ? n0(Number(a.dni)) : a.dni)}</span>` : ''}${ctx.pes ? chipsPestanas(pestanasDe(a), { menos: ctx.pes }) : chipsPestanas(pestanasDe(a))}${ausentesHoy.has(a.id) ? '<span class="chip hoy">de licencia hoy</span>' : ''}${exced ? '<span class="chip err">tope excedido</span>' : ''}${a.inactivo ? '<span class="chip">baja</span>' : ''}</div>
           ${c.length ? `<div class="solo-m small muted">${c.map(x => esc((x.idCargo ? 'ID ' + x.idCargo + ' · ' : '') + txtCargo(x))).join('<br>')}</div>` : ''}</td>
         <td class="hide-m ag-cargos ag-ids c">${c.length ? c.map(x => `<div>${x.idCargo ? esc(x.idCargo) : '<span>—</span>'}</div>`).join('') : '<span>—</span>'}</td>
-        <td class="hide-m ag-cargos">${c.length ? c.map(x => `<div>${esc(txtCargo(x))}${x.caracter ? ` <span>· ${esc(x.caracter)}</span>` : ''}</div>`).join('') : '<span>—</span>'}</td>
+        <td class="hide-m ag-cargos">${c.length ? c.map(x => { const sp = suplenciaDe(a, x, ctx); return `<div>${esc(txtCargo(x))}${x.caracter ? ` <span>· ${esc(x.caracter)}</span>` : ''}${sp ? `<span class="suple">${esc(sp)}</span>` : ''}</div>`; }).join('') : '<span>—</span>'}</td>
         <td class="num c dias-aus">${aus}</td>
         <td>${det.length ? `<div class="desglose">${det.map(x => `<span title="${esc(artNombre(x.art) + ': ' + x.n + ' ' + unidadTxt(x.art.unidad, x.n))}">${artBadge(x.art)}${x.n}</span>`).join('')}</div>` : '<span class="muted">—</span>'}</td></tr>`;
     }).join('')}</tbody></table>`;
@@ -1908,7 +1915,7 @@ function vistaFicha(ctx) {
             .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('') || '<dt class="muted">Sin datos personales cargados</dt><dd></dd>'}
         </dl>
         ${cargos.length ? `<table class="t"><thead><tr><th>Dónde</th><th>Cargo / cátedra</th><th class="num">Hs</th><th>Curso</th><th>ID</th><th>Carácter</th><th>Alta</th><th>Baja</th></tr></thead><tbody>
-          ${cargos.map(c => `<tr><td><span class="pchip">${esc(nombrePestana(c.pestana))}</span>${c.escuela ? `<div class="small">${esc(c.escuela)}</div>` : ''}</td><td>${esc(c.catedra || '—')}${c.resDisp ? `<div class="small muted">Res./Disp. ${esc(c.resDisp)}</div>` : ''}</td><td class="num">${esc(c.hs ?? '')}</td><td>${esc(c.cursoDiv || '')}</td><td>${esc(c.idCargo || '')}</td><td>${esc(c.caracter || '')}</td><td>${fmt(c.alta)}</td><td>${c.baja ? fmt(c.baja) : '—'}</td></tr>`).join('')}</tbody></table>` : '<p class="muted small">Sin cargos cargados.</p>'}
+          ${cargos.map(c => `<tr><td><span class="pchip">${esc(nombrePestana(c.pestana))}</span>${c.escuela ? `<div class="small">${esc(c.escuela)}</div>` : ''}</td><td>${esc(c.catedra || '—')}${suplenciaDe(ag, c, ctx) ? `<span class="suple">${esc(suplenciaDe(ag, c, ctx))}</span>` : ''}${c.resDisp ? `<div class="small muted">Res./Disp. ${esc(c.resDisp)}</div>` : ''}</td><td class="num">${esc(c.hs ?? '')}</td><td>${esc(c.cursoDiv || '')}</td><td>${esc(c.idCargo || '')}</td><td>${esc(c.caracter || '')}</td><td>${fmt(c.alta)}</td><td>${c.baja ? fmt(c.baja) : '—'}</td></tr>`).join('')}</tbody></table>` : '<p class="muted small">Sin cargos cargados.</p>'}
         ${tieneHorario(ag) ? `<div class="small"><div class="lbl">Días y horario de trabajo</div>${cargos.filter(c => resumenHorario(c)).map(c => `<div><span class="muted">${esc(c.catedra || c.idCargo || 'Cargo')}:</span> ${esc(resumenHorario(c))}</div>`).join('')}</div>` : ''}
         ${ag.obs ? `<div class="small"><b>Observaciones:</b> ${esc(ag.obs)}</div>` : ''}
       </div></section>
@@ -2658,6 +2665,249 @@ function imprimirReporte() {
   setTimeout(() => window.print(), 50);
 }
 
+/* ---------- Importar la planta (POF) ----------
+   La Planta Orgánica Nominal que baja el Ministerio en PDF trae un renglón por cargo:
+   agente, legajo, Id Pof, cargo, horas, asignatura, revista y alta. Se lee en el navegador
+   (con pdf.js) y, antes de guardar nada, se muestra qué personas y cargos son nuevos, cuáles
+   cambian y cuáles ya no figuran. Cada persona se reconoce por su legajo, así que alguien que
+   ya está en otro CEPJA recibe el cargo en su misma ficha. */
+const PDFJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+const REVISTA_POF = { T: 'Titular', I: 'Interino', S: 'Suplente', C: 'Interino Condicional', Z: 'Suplente Condicional' };
+const PARTICULAS_NOMBRE = new Set(['DE', 'DEL', 'LA', 'LAS', 'LOS', 'Y', 'DA', 'DI', 'VAN', 'VON']);
+
+function cargarPdfjs() {
+  if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+  return new Promise((ok, mal) => {
+    const s = document.createElement('script');
+    s.src = PDFJS_URL;
+    s.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_URL.replace('pdf.min.js', 'pdf.worker.min.js'); ok(window.pdfjsLib); };
+    s.onerror = () => mal(new Error('No se pudo cargar el lector de PDF. Revisá la conexión a internet y probá de nuevo.'));
+    document.head.append(s);
+  });
+}
+/* Texto de cada página del PDF, con su posición (x de izquierda a derecha, y de abajo hacia arriba) */
+async function leerTextoPDF(archivo) {
+  const lib = await cargarPdfjs();
+  const doc = await lib.getDocument({ data: new Uint8Array(await archivo.arrayBuffer()) }).promise;
+  const paginas = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const tc = await (await doc.getPage(i)).getTextContent();
+    paginas.push(tc.items.map(it => ({ str: it.str, x: it.transform[4], y: it.transform[5], w: it.width || 0 })));
+  }
+  return paginas;
+}
+/* Lee la POF a partir del texto de sus páginas. Función pura: se prueba sin PDF. */
+function leerPOF(paginas) {
+  const pof = { establecimiento: '', anexo: '', fecha: '', filas: [] };
+  const fecha = s => { const m = String(s).match(/^(\d{2})\/(\d{2})\/(\d{4})$/); return m ? `${m[3]}-${m[2]}-${m[1]}` : ''; };
+  let ultima = null;
+  for (const crudos of paginas) {
+    const its = crudos.map(i => ({ s: String(i.str || '').trim(), x: i.x, y: i.y, w: i.w || 0 })).filter(i => i.s);
+    const est = its.find(i => /ANEXO\s+\d+/i.test(i.s) || /^CENTRO EDUCATIVO/i.test(i.s));
+    if (est) { pof.establecimiento = est.s.replace(/^Establecimiento:\s*/i, ''); pof.anexo = (est.s.match(/ANEXO\s+(\d+)/i) || [])[1] || pof.anexo; }
+    // Encabezados de columna. A veces varios vienen pegados en un mismo texto ("Año Div Tur Hs…"):
+    // entonces la posición de cada palabra se calcula dentro de ese texto.
+    const h = {};
+    for (const [k, pal] of [['agente', 'Agente'], ['legajo', 'Legajo'], ['cargo', 'Cargo'], ['anio', 'Año'], ['asig', 'Asignaturas'], ['orient', 'Orientación']]) {
+      const it = its.find(i => i.s.includes(pal));
+      if (it) { const k0 = it.s.indexOf(pal); h[k] = { x: it.x + (it.w && it.s.length ? it.w * k0 / it.s.length : 0), y: it.y }; }
+    }
+    if (!h.agente || !h.legajo || !h.cargo || !h.anio || !h.asig || !h.orient) continue; // no es una página de la planta
+    const techo = h.agente.y;
+    // La fecha de emisión está al pie, a la izquierda
+    const pie = its.filter(i => i.y < techo && i.x < h.legajo.x && fecha(i.s)).sort((a, b) => a.y - b.y)[0];
+    if (pie && !pof.fecha) pof.fecha = fecha(pie.s);
+    // Renglones: los textos que están a la misma altura (con 2 puntos de tolerancia), de arriba hacia abajo
+    const renglones = [];
+    for (const it of its.filter(i => i.y < techo - 1 && (!pie || i.y > pie.y + 1)).sort((a, b) => b.y - a.y || a.x - b.x)) {
+      const r = renglones.find(r => Math.abs(r.y - it.y) <= 2);
+      if (r) r.items.push(it); else renglones.push({ y: it.y, items: [it] });
+    }
+    const corte = h.orient.x - 2;
+    const fila = /^(.*?)\s*(\d{4,8})\s+(\d+)\s+(\d+-\d+)\s+(.+?)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\d+)\s*(.*)$/;
+    const cola = /(\d{2}\/\d{2}\/\d{4})\s+([A-Z])\s+([A-Z])\s+(\d{2}\/\d{2}\/\d{4})\s*$/;
+    for (const r of renglones) {
+      r.items.sort((a, b) => a.x - b.x);
+      const izq = r.items.filter(i => i.x < corte).map(i => i.s).join(' ');
+      const der = r.items.filter(i => i.x >= corte).map(i => i.s).join(' ');
+      const m = izq.match(fila);
+      if (m && m[1]) {
+        const c = der.match(cola);
+        ultima = { agente: m[1], legajo: m[2], idPof: m[3], cod: m[4], cargo: m[5], hs: m[9], asignatura: m[10].trim(),
+          revista: c ? c[3] : '', altaPof: c ? fecha(c[1]) : '', alta: c ? fecha(c[4]) : '' };
+        pof.filas.push(ultima);
+      } else if (ultima) {
+        // Renglón que sigue al anterior: el nombre, el cargo o la asignatura no entraron en una línea
+        const en = (a, b) => r.items.filter(i => i.x >= a - 2 && i.x < b - 2).map(i => i.s).join(' ');
+        const nom = en(-1e9, h.legajo.x), car = en(h.cargo.x, h.anio.x), asi = en(h.asig.x, h.orient.x);
+        if (nom) ultima.agente += ' ' + nom;
+        if (car) ultima.cargo += ' ' + car;
+        if (asi) ultima.asignatura = (ultima.asignatura + ' ' + asi).trim();
+      }
+    }
+  }
+  pof.filas.forEach(f => { f.agente = f.agente.replace(/\s+/g, ' ').trim(); f.cargo = f.cargo.replace(/\s+/g, ' ').trim(); });
+  return pof;
+}
+/* "ALIZANDRO GARCIA PEDRO NAHUEL" → apellido "Alizandro Garcia", nombre "Pedro Nahuel".
+   Con 4 palabras o más, las dos primeras son el apellido; si no, la primera.
+   "DEL", "DE LA", etc. van pegadas a la palabra que sigue. Se puede corregir antes de importar. */
+function separarNombre(completo) {
+  const ps = String(completo || '').trim().split(/\s+/).filter(Boolean);
+  const grupos = [];
+  for (let i = 0; i < ps.length; i++) {
+    let g = ps[i];
+    while (PARTICULAS_NOMBRE.has(ps[i].toUpperCase()) && i + 1 < ps.length) { i++; g += ' ' + ps[i]; }
+    grupos.push(g);
+  }
+  const n = grupos.length >= 4 ? 2 : 1;
+  return { apellido: titulo(grupos.slice(0, n).join(' ')), nombre: titulo(grupos.slice(n).join(' ')) };
+}
+function catedraPOF(f) {
+  if (/^HORA/i.test(f.cargo) && f.asignatura) return f.asignatura;
+  const c = f.cargo.charAt(0).toUpperCase() + f.cargo.slice(1).toLowerCase();
+  return f.asignatura ? `${c} — ${f.asignatura}` : c;
+}
+const soloDigitos = s => String(s || '').replace(/\D/g, '');
+/* Qué cambiaría en la pestaña si se importa esta POF (no toca nada) */
+function planPOF(pof, pes, e = estado) {
+  const ags = vivos(e.agentes);
+  const porLegajo = new Map(ags.filter(a => soloDigitos(a.legajoPersonal)).map(a => [soloDigitos(a.legajoPersonal), a]));
+  const porNombre = new Map(ags.map(a => [normalizar(`${a.apellido} ${a.nombre}`).replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim(), a]));
+  const personas = new Map();
+  for (const f of pof.filas) {
+    if (!personas.has(f.legajo)) {
+      const sug = separarNombre(f.agente);
+      const porNom = porNombre.get(normalizar(f.agente).replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim());
+      const ag = porLegajo.get(soloDigitos(f.legajo)) || porNom || null;
+      personas.set(f.legajo, { legajo: f.legajo, agentePOF: f.agente, ...sug, existente: ag, porNombre: !!ag && !porLegajo.get(soloDigitos(f.legajo)), cargos: [] });
+    }
+    const p = personas.get(f.legajo);
+    const datos = { pestana: pes, idCargo: f.idPof, catedra: catedraPOF(f), hs: f.hs === '0' ? '' : f.hs, caracter: REVISTA_POF[f.revista] || '', alta: f.alta || '' };
+    const previo = p.existente ? vivos(p.existente.cargos).find(c => c.pestana === pes && String(c.idCargo || '').trim() === f.idPof) : null;
+    let accion = 'nuevo', cambios = [];
+    if (previo) {
+      for (const [k, n] of [['catedra', 'cátedra'], ['hs', 'horas'], ['caracter', 'carácter'], ['alta', 'alta']]) {
+        if (datos[k] && String(previo[k] || '') !== datos[k]) cambios.push(`${n}: ${k === 'alta' ? fmt(previo[k]) : previo[k] || '—'} → ${k === 'alta' ? fmt(datos[k]) : datos[k]}`);
+      }
+      if (previo.baja) cambios.push(`vuelve a estar (tenía baja el ${fmt(previo.baja)})`);
+      accion = cambios.length ? 'cambia' : 'igual';
+    }
+    p.cargos.push({ datos, previo, accion, cambios });
+  }
+  // Cargos con ID en esta pestaña que ya no figuran en la POF
+  const enPOF = new Set([...personas.values()].filter(p => p.existente).flatMap(p => p.cargos.map(c => p.existente.id + '|' + c.datos.idCargo)));
+  const bajas = [];
+  for (const a of ags) for (const c of cargosEn(a, pes)) {
+    if (c.baja || !String(c.idCargo || '').trim()) continue;
+    if (!enPOF.has(a.id + '|' + String(c.idCargo).trim())) bajas.push({ ag: a, cargo: c });
+  }
+  return { personas: [...personas.values()], bajas, fecha: pof.fecha || hoyISO() };
+}
+/* Aplica el plan. nombres: { legajo: 'Apellido, Nombre' } corregidos en la revisión; bajasOk: ids de cargos a dar de baja */
+function aplicarPOF(plan, pes, { nombres = {}, bajasOk = null } = {}) {
+  let nuevos = 0, cargosNuevos = 0, cambiados = 0, bajas = 0;
+  mutar(e => {
+    for (const p of plan.personas) {
+      if (p.existente) {
+        const ag = e.agentes.find(a => a.id === p.existente.id); if (!ag) continue;
+        let toco = false;
+        if (!ag.legajoPersonal) { ag.legajoPersonal = p.legajo; toco = true; }
+        for (const c of p.cargos) {
+          if (c.accion === 'nuevo') { (ag.cargos ||= []).push(sellar({ ...c.datos, cursoDiv: '', resDisp: '', baja: '', obs: '', horario: {}, origen: 'POF' })); cargosNuevos++; toco = true; }
+          else if (c.accion === 'cambia') {
+            const v = ag.cargos.find(x => x.id === c.previo.id);
+            for (const k of ['catedra', 'hs', 'caracter', 'alta']) if (c.datos[k]) v[k] = c.datos[k];
+            v.baja = ''; tocar(v); cambiados++; toco = true;
+          }
+        }
+        if (toco) tocar(ag);
+      } else {
+        const txt = String(nombres[p.legajo] ?? `${p.apellido}, ${p.nombre}`);
+        const [ap, ...no] = txt.split(',');
+        e.agentes.push(sellar({ apellido: ap.trim() || p.apellido, nombre: no.join(',').trim(), regimen: '233', legajoPersonal: p.legajo,
+          cargos: p.cargos.map(c => sellar({ ...c.datos, cursoDiv: '', resDisp: '', baja: '', obs: '', horario: {}, origen: 'POF' })) }));
+        nuevos++; cargosNuevos += p.cargos.length;
+      }
+    }
+    for (const b of plan.bajas) {
+      if (bajasOk && !bajasOk.includes(b.cargo.id)) continue;
+      const ag = e.agentes.find(a => a.id === b.ag.id); const c = ag && ag.cargos.find(x => x.id === b.cargo.id);
+      if (c && !c.baja) { c.baja = plan.fecha; tocar(c); tocar(ag); bajas++; }
+    }
+  }, { msg: 'Planta importada.' });
+  return { nuevos, cargosNuevos, cambiados, bajas };
+}
+/* Suplencias: el mismo ID en la misma pestaña, ocupado por varias personas a la vez.
+   Se ordenan por fecha de alta: la más vieja es la dueña del cargo y las siguientes se fueron
+   designando sucesivamente, cada una suplantando a la anterior. La del alta más reciente es la
+   que está trabajando; las anteriores están de licencia. Sin fechas, decide el carácter. */
+function cadenaSuplencia(ag, c, ctx) {
+  if (!c || !String(c.idCargo || '').trim() || !c.pestana || c.baja) return null;
+  const id = String(c.idCargo).trim();
+  const todos = [];
+  for (const a of ctx.agTodos) for (const x of cargosEn(a, c.pestana)) if (!x.baja && String(x.idCargo || '').trim() === id) todos.push({ a, x });
+  if (todos.length < 2) return null;
+  const sup = x => /^Suplente/i.test(x.caracter || '') ? 1 : 0;
+  todos.sort((p, q) => (p.x.alta && q.x.alta ? p.x.alta.localeCompare(q.x.alta) : 0) || sup(p.x) - sup(q.x));
+  const i = todos.findIndex(t => t.x.id === c.id);
+  return { antes: i > 0 ? todos[i - 1] : null, despues: i < todos.length - 1 ? todos[i + 1] : null, todos };
+}
+function suplenciaDe(ag, c, ctx) {
+  const k = cadenaSuplencia(ag, c, ctx); if (!k) return '';
+  const partes = [];
+  if (k.antes) partes.push(`Suplente de ${nombreAgente(k.antes.a)}${k.antes.x.alta ? ' (alta ' + fmt(k.antes.x.alta) + ')' : ''}`);
+  if (k.despues) partes.push(`${k.antes ? 'De licencia' : 'Dueño/a del cargo, de licencia'}: la/lo suplanta ${nombreAgente(k.despues.a)}${k.despues.x.alta ? ' (alta ' + fmt(k.despues.x.alta) + ')' : ''}`);
+  return partes.join(' · ');
+}
+async function importarPOF(archivo) {
+  const pes = pestanaActual();
+  if (!pes) return toast('Elegí primero la pestaña del CEPJA.');
+  let pof;
+  try { pof = leerPOF(await leerTextoPDF(archivo)); }
+  catch (e) { return confirmar({ titulo: 'No se pudo leer el PDF', html: `<p>${esc(e.message || e)}</p>`, ok: 'Entendido' }); }
+  if (!pof.filas.length) return confirmar({ titulo: 'No encontré la planta', html: '<p>El archivo no parece una <b>Planta Orgánica Nominal</b> del Ministerio: no encontré renglones con legajo, Id Pof y cargo. Revisá que sea el PDF tal como lo baja el sistema.</p>', ok: 'Entendido' });
+  abrirRevisionPOF(pof, pes);
+}
+function abrirRevisionPOF(pof, pes) {
+  const plan = planPOF(pof, pes);
+  const p = pestanaPorId(pes);
+  const numPes = (String(p?.nombre || '').match(/\d+/) || [])[0];
+  const distinto = pof.anexo && numPes && pof.anexo !== numPes;
+  const nuevos = plan.personas.filter(x => !x.existente);
+  const cuenta = k => plan.personas.reduce((s, x) => s + x.cargos.filter(c => c.accion === k).length, 0);
+  const chip = c => c.accion === 'nuevo' ? '<span class="chip ok">Nuevo</span>' : c.accion === 'cambia' ? '<span class="chip warn">Cambia</span>' : '<span class="chip">Igual</span>';
+  const filaPersona = x => {
+    const otras = x.existente ? pestanasDe(x.existente).filter(id => id !== pes) : [];
+    const cab = x.existente
+      ? `<b>${esc(nombreAgente(x.existente))}</b> <span class="small muted">· legajo ${esc(x.legajo)}</span> ${x.porNombre ? '<span class="chip warn">reconocido por el nombre</span>' : '<span class="chip">ya está cargado</span>'} ${chipsPestanas(otras)}`
+      : `<label class="f pof-nombre"><span class="small muted">Apellido, Nombre · legajo ${esc(x.legajo)} · en la POF: ${esc(x.agentePOF)}</span><input class="in" data-pof-nombre="${esc(x.legajo)}" value="${esc(x.apellido + ', ' + x.nombre)}"></label>`;
+    return `<li class="pof-persona">${cab}<ul class="pof-cargos">${x.cargos.map(c => `<li>${chip(c)} <b>ID ${esc(c.datos.idCargo)}</b> · ${esc(c.datos.catedra)}${c.datos.hs ? ` · ${esc(c.datos.hs)} hs` : ''}${c.datos.caracter ? ` · ${esc(c.datos.caracter)}` : ''}${c.datos.alta ? ` · alta ${fmt(c.datos.alta)}` : ''}${c.cambios.length ? `<div class="small muted">${esc(c.cambios.join(' · '))}</div>` : ''}</li>`).join('')}</ul></li>`;
+  };
+  const m = abrirModal(`<div class="modal-h"><div><h2>Importar planta (POF)</h2><div class="modal-sub">${esc(pof.establecimiento || 'Planta Orgánica Nominal')}${pof.fecha ? ' · emitida el ' + fmt(pof.fecha) : ''}</div></div><span class="spacer"></span><button class="iconbtn" data-x="cerrar" aria-label="Cerrar">${ico('x')}</button></div>
+    <div class="modal-b stack">
+      ${distinto ? `<div class="msg err">${ico('alerta', 'sm')}<span>Esta POF es del <b>Anexo ${esc(pof.anexo)}</b> y estás en la pestaña <b>${esc(p.nombre)}</b>. Revisá que estés en la pestaña correcta antes de importar.</span></div>` : ''}
+      <div class="msg info">${ico('info', 'sm')}<span>Se van a cargar en <b>${esc(nombrePestana(pes, { largo: true }))}</b>: <b>${plural(nuevos.length, 'persona nueva', 'personas nuevas')}</b>, <b>${plural(cuenta('nuevo'), 'cargo nuevo', 'cargos nuevos')}</b> y <b>${plural(cuenta('cambia'), 'cargo que cambia', 'cargos que cambian')}</b>${cuenta('igual') ? ` (${plural(cuenta('igual'), 'cargo queda', 'cargos quedan')} igual)` : ''}. Nada se guarda hasta que toques "Importar".</span></div>
+      ${nuevos.length ? '<p class="small">Revisá cómo quedó separado el <b>apellido</b> del <b>nombre</b> de las personas nuevas: va el apellido, una coma y el nombre. Las tildes que falten se pueden agregar acá o después.</p>' : ''}
+      <ul class="pof-lista">${plan.personas.map(filaPersona).join('')}</ul>
+      ${plan.bajas.length ? `<section class="card plano card-b stack"><h3>Ya no figuran en la POF</h3>
+        <p class="small muted">Estos cargos de la pestaña no están en esta planta. Los tildados quedan con fecha de baja el ${fmt(plan.fecha)}: no se borran y conservan sus licencias.</p>
+        ${plan.bajas.map(b => `<label class="check"><input type="checkbox" data-pof-baja="${esc(b.cargo.id)}" checked> ${esc(nombreAgente(b.ag))} · ID ${esc(b.cargo.idCargo)} · ${esc(b.cargo.catedra || '')}</label>`).join('')}</section>` : ''}
+    </div>
+    <div class="modal-f"><span class="small muted">${plural(pof.filas.length, 'renglón leído', 'renglones leídos')} de la POF</span><span class="spacer"></span><button class="btn" data-x="cerrar">Cancelar</button><button class="btn primary" data-x="importar">Importar</button></div>`);
+  m.classList.add('ancho');
+  m.querySelectorAll('[data-x=cerrar]').forEach(b => { b.onclick = () => cerrarModal(); });
+  m.querySelector('[data-x=importar]').onclick = () => {
+    const nombres = {}; $$('[data-pof-nombre]', m).forEach(i => { nombres[i.dataset.pofNombre] = i.value; });
+    const mal = Object.values(nombres).filter(v => !v.includes(',') || !v.split(',')[0].trim());
+    if (mal.length) return toast('Escribí cada nombre como "Apellido, Nombre", con una coma en el medio.');
+    const bajasOk = $$('[data-pof-baja]', m).filter(i => i.checked).map(i => i.dataset.pofBaja);
+    cerrarModal();
+    const r = aplicarPOF(plan, pes, { nombres, bajasOk });
+    toast(`Planta importada: ${plural(r.nuevos, 'persona nueva', 'personas nuevas')}, ${plural(r.cargosNuevos, 'cargo nuevo', 'cargos nuevos')}, ${plural(r.cambiados, 'cambio')}${r.bajas ? `, ${plural(r.bajas, 'baja')}` : ''}.`);
+  };
+}
+
 /* ---------- Datos de ejemplo ---------- */
 function cargarEjemplo() {
   const y = anioDe(hoyISO());
@@ -2792,6 +3042,7 @@ const acciones = {
   'dia': el => { const n = Number(el.dataset.n); ui.fecha = n === 0 ? hoyISO() : sumarDias(ui.fecha, n); render(); },
   'anio': el => { ui.anio += Number(el.dataset.n); ui.aFecha = null; render(); },
   'pestana': el => elegirPestana(el.dataset.v),
+  'importar-pof': () => { const i = $('#file-pof'); i.value = ''; i.click(); },
   'pes-nueva': () => cambiarPestanas(ps => { ps.push({ id: 'p-' + uid().slice(0, 8), nombre: 'Nueva pestaña', detalle: '', tipo: 'cepja' }); }, 'Pestaña agregada: cambiale el nombre.'),
   'pes-archivar': el => cambiarPestanas(ps => { const p = ps.find(x => x.id === el.dataset.v); if (p) p.archivada = !p.archivada; }, 'Listo.'),
   'pes-mover': el => cambiarPestanas(ps => { const i = ps.findIndex(x => x.id === el.dataset.v); if (i > 0) [ps[i - 1], ps[i]] = [ps[i], ps[i - 1]]; }),
@@ -2909,6 +3160,7 @@ document.addEventListener('submit', e => {
   if (ya) return toast(`El ${fmt(fecha)} ya está cargado: ${ya.desc}.`);
   mutar(e2 => { e2.calendario.push(sellar({ fecha, tipo, desc })); }, { msg: `Agregado ${fmt(fecha)}.` });
 });
+$('#file-pof').addEventListener('change', e => { const f = e.target.files && e.target.files[0]; if (f) importarPOF(f); });
 $('#buscar-global').addEventListener('change', e => {
   const v = e.target.value.trim(); if (!v) return;
   if (Combo.input === e.target) Combo.cerrar();
