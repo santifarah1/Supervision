@@ -12,6 +12,7 @@
     "@firebase/rules-unit-testing": "6.0.0",
     "firebase": "13.2.0",
     "firebase-tools": "15.37.0",
+    "pdfjs-dist": "^3.11.174",
     "playwright": "1.63.0"
   }
 }
