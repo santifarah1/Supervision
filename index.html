@@ -2839,7 +2839,7 @@ function aplicarPOF(plan, pes, { nombres = {}, bajasOk = null } = {}) {
   return { nuevos, cargosNuevos, cambiados, bajas };
 }
 /* Suplencias: el mismo ID en la misma pestaña, ocupado por varias personas a la vez.
-   Se ordenan por fecha de alta: la más vieja es la dueña del cargo y las siguientes se fueron
+   Se ordenan por fecha de alta: la más vieja es la que tiene la primera designación y las siguientes se fueron
    designando sucesivamente, cada una suplantando a la anterior. La del alta más reciente es la
    que está trabajando; las anteriores están de licencia. Sin fechas, decide el carácter. */
 function cadenaSuplencia(ag, c, ctx) {
@@ -2853,11 +2853,16 @@ function cadenaSuplencia(ag, c, ctx) {
   const i = todos.findIndex(t => t.x.id === c.id);
   return { antes: i > 0 ? todos[i - 1] : null, despues: i < todos.length - 1 ? todos[i + 1] : null, todos };
 }
+/* "Interino" → "Interino/a", "Interino Condicional" → "Interino/a condicional" (sirve para mujeres y varones) */
+function caracterAmbos(car) {
+  const t = String(car || '').trim(); if (!t) return '';
+  return t.replace(/^(Interin|Titular|Suplente|Reubicad)o?/i, (m, r) => /o$/i.test(m) ? m + '/a' : m).replace(/\sCondicional$/i, ' condicional');
+}
 function suplenciaDe(ag, c, ctx) {
   const k = cadenaSuplencia(ag, c, ctx); if (!k) return '';
   const partes = [];
   if (k.antes) partes.push(`Suplente de ${nombreAgente(k.antes.a)}${k.antes.x.alta ? ' (alta ' + fmt(k.antes.x.alta) + ')' : ''}`);
-  if (k.despues) partes.push(`${k.antes ? 'De licencia' : 'Dueño/a del cargo, de licencia'}: la/lo suplanta ${nombreAgente(k.despues.a)}${k.despues.x.alta ? ' (alta ' + fmt(k.despues.x.alta) + ')' : ''}`);
+  if (k.despues) partes.push(`${k.antes ? 'De licencia' : `${caracterAmbos(c.caracter) || 'Primera designación'}, de licencia`}: la/lo suplanta ${nombreAgente(k.despues.a)}${k.despues.x.alta ? ' (alta ' + fmt(k.despues.x.alta) + ')' : ''}`);
   return partes.join(' · ');
 }
 async function importarPOF(archivo) {
